@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
 
         //addItems("Richard", 1567, "Good tea");
-        getItem(2);
-
+        //m(2);
+        removeItem(6);
         MANAGER_FACTORY.close();
     }
 
@@ -70,6 +70,27 @@ public class Main {
             e.printStackTrace();
         }finally {
             entityManager.close();
+        }
+    }
+
+    public static void removeItem(int id){
+        EntityManager entityManager = MANAGER_FACTORY.createEntityManager();
+        EntityTransaction entityTransaction = null;
+        Item item;
+
+        try{
+            entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
+
+            item = entityManager.find(Item.class, id);
+            entityManager.remove(item);
+            entityTransaction.commit();
+            }catch (Exception e){
+                if(entityTransaction != null)
+                    entityTransaction.rollback();
+                    e.printStackTrace();
+        }finally{
+           entityManager.close();
         }
     }
 
