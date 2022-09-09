@@ -9,7 +9,7 @@ public class Main {
 
         //addItems("Richard", 1567, "Good tea");
         //m(2);
-        removeItem(6);
+        editItem(1, 17900, "New text for test");
         MANAGER_FACTORY.close();
     }
 
@@ -91,6 +91,30 @@ public class Main {
                     e.printStackTrace();
         }finally{
            entityManager.close();
+        }
+    }
+
+    public static void editItem(int id, int price, String info){
+        EntityManager entityManager = MANAGER_FACTORY.createEntityManager();
+        EntityTransaction entityTransaction = null;
+        Item item;
+
+        try{
+            entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
+
+            item = entityManager.find(Item.class, id);
+            item.setPrice(price);
+            item.setInfo(info);
+
+            entityManager.persist(item);
+            entityTransaction.commit();
+        }catch (Exception e){
+            if(entityTransaction != null)
+                entityTransaction.rollback();
+            e.printStackTrace();
+        }finally{
+            entityManager.close();
         }
     }
 
