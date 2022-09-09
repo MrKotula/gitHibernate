@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         //addItems("Richard", 1567, "Good tea");
-        getItems();
+        getItem(2);
 
         MANAGER_FACTORY.close();
     }
@@ -48,6 +48,24 @@ public class Main {
             items = typedQuery.getResultList();
             for(Item item : items)
                 System.out.println("Name: " + item.getName() + ", price: " + item.getPrice() + ", info: " + item.getInfo());
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            entityManager.close();
+        }
+    }
+
+    public static void getItem(int id){
+        EntityManager entityManager = MANAGER_FACTORY.createEntityManager();
+
+        String query = "SELECT i FROM Item i WHERE i.id = :id1";
+        TypedQuery<Item> typedQuery = entityManager.createQuery(query, Item.class);
+        Item item;
+        typedQuery.setParameter("id1", id);
+
+        try {
+            item = typedQuery.getSingleResult();
+          System.out.println("Name: " + item.getName() + ", price: " + item.getPrice() + ", info: " + item.getInfo());
         }catch (Exception e){
             e.printStackTrace();
         }finally {
